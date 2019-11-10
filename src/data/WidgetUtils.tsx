@@ -10,7 +10,7 @@ export class WidgetUtils {
         "SLIDER": Slider,
         "DOUBLE_SLIDER": DoubleSlider,
         "GROUP": Group,
-        undefined: Group,
+        undefined: Group, // pipeline TODO: Remove
     };
 
     static fromJSON(json: WidgetJSON): Widget {

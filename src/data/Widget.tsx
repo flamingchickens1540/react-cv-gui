@@ -4,7 +4,7 @@ export abstract class Widget {
     type: string;
     name: string;
 
-    public abstract renderComponent(handleChange: () => void): JSX.Element;
+    public abstract renderComponent(handleChange: () => void): React.ReactElement;
 
     public getJSONRules(json: object) {
         return {};
