@@ -51,11 +51,10 @@ export class ConfigViewer extends React.Component<ConfigViewerProps, ConfigViewe
 			"value": 2
 		},
 		{
-			"type": "SLIDER",
-			"name": "myFirst6Stream",
-			"value": 2
-		},
-		{
+			"type": "GROUP",
+			"name": "myFirstGroup",
+			"widgets": [
+					{
 			"type": "SLIDER",
 			"name": "myFirstS7tream",
 			"value": 2
@@ -70,6 +69,7 @@ export class ConfigViewer extends React.Component<ConfigViewerProps, ConfigViewe
 			"name": "dd",
 			"lowerValue": 3,
 			"upperValue": 5
+		}]
 		}
 		]
 	},

@@ -5,6 +5,10 @@ export abstract class Widget {
     name: string;
 
     public abstract renderComponent(handleChange: () => void): JSX.Element;
+
+    public getJSONRules(json: object) {
+        return {};
+    }
 }
 
 export abstract class WidgetJSON {
