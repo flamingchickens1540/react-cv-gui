@@ -2,6 +2,7 @@ import * as React from "react";
 // @ts-ignore
 import {Config} from "../data/Config";
 import {PipelineViewer} from "./PipelineViewer";
+import {Pipeline} from "../data/Pipeline";
 
 export interface ConfigViewerProps {
 }
@@ -15,7 +16,7 @@ export class ConfigViewer extends React.Component<ConfigViewerProps, ConfigViewe
     constructor(props: ConfigViewerProps) {
         super(props);
 
-        let newConfig = JSON.parse(`
+        let newConfig = Config.fromJSON(JSON.parse(`
 {
 	"pipelines": [
 	{
@@ -23,7 +24,7 @@ export class ConfigViewer extends React.Component<ConfigViewerProps, ConfigViewe
 		"widgets": [{
 			"type": "STREAM",
 			"name": "myFirstStream",
-			"url": "google.com"
+			"url": "https://www.w3schools.com/html/pic_trulli.jpg"
 		}]
 	},
 	{
@@ -32,6 +33,36 @@ export class ConfigViewer extends React.Component<ConfigViewerProps, ConfigViewe
 		{
 			"type": "SLIDER",
 			"name": "myFirstStream",
+			"value": 2
+		},
+		{
+			"type": "SLIDER",
+			"name": "myFirstSt3ream",
+			"value": 2
+		},
+		{
+			"type": "SLIDER",
+			"name": "myFirstSt4ream",
+			"value": 2
+		},
+		{
+			"type": "SLIDER",
+			"name": "myFirstSt5ream",
+			"value": 2
+		},
+		{
+			"type": "SLIDER",
+			"name": "myFirst6Stream",
+			"value": 2
+		},
+		{
+			"type": "SLIDER",
+			"name": "myFirstS7tream",
+			"value": 2
+		},
+		{
+			"type": "SLIDER",
+			"name": "myFir8stStream",
 			"value": 2
 		},
 		{
@@ -54,30 +85,34 @@ export class ConfigViewer extends React.Component<ConfigViewerProps, ConfigViewe
 	],
 	"selectedPipelineIndex":2
 }
-        `, Config.reviver);
+        `));
         console.log(newConfig);
         this.state = {config: newConfig};
-        this.handlePipelineIndexChange = this.handlePipelineIndexChange.bind(this);
     }
 
-    handleCvConfigUpdates(jsonString: string) {
-        this.setState({config: JSON.parse(jsonString, Config.reviver)});
+    private handleConfigUpdates(jsonString: string) {
+        this.setState({config: Config.fromJSON(JSON.parse(jsonString))});
     }
 
-    handlePipelineIndexChange(e: { target: { selectedIndex: number; }; }) {
+    private handlePipelineIndexChange = (e: { target: { selectedIndex: number; }; }) => {
         this.state.config.selectedPipelineIndex = e.target.selectedIndex;
-        this.setState({config: this.state.config});
-    }
+        this.updateState();
+    };
+
+    private updateState = () => this.setState({config: this.state.config});
 
     render() {
+        let pipelineToOption = (pipeline: Pipeline, index: number) => <option value={index}
+                                                                              key={pipeline.name}>{pipeline.name}</option>;
+        let currentPipeline = this.state.config.pipelines[this.state.config.selectedPipelineIndex];
+
         return <div>
             {/*<Websocket url={'ws://' + location.hostname + ':8888/websocket'} onMessage={this.handleCvConfigUpdates}/>*/}
             <select value={this.state.config.selectedPipelineIndex}
-                    onChange={this.handlePipelineIndexChange.bind(this)}>
-                {this.state.config.pipelines.map((pipeline, index) => <option value={index}
-                                                                              key={pipeline.name}>{pipeline.name}</option>)}
+                    onChange={this.handlePipelineIndexChange}>
+                {this.state.config.pipelines.map(pipelineToOption)}
             </select>
-            <PipelineViewer pipeline={this.state.config.pipelines[this.state.config.selectedPipelineIndex]}/>
+            <PipelineViewer pipeline={currentPipeline} onChange={this.updateState}/>
         </div>;
     }
 }

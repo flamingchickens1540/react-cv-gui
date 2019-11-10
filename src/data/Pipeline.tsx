@@ -1,24 +1,16 @@
-import {WidgetData} from "./WidgetData";
+import {Widget, WidgetJSON} from "./Widget";
 import {WidgetUtils} from "./WidgetUtils";
 
 export class Pipeline {
     name: string;
-    widgets: Array<WidgetData>;
+    widgets: Array<Widget>;
 
-    static fromJSON(json: PipelineJSON | string): Pipeline {
-        if (typeof json === 'string') {
-            return JSON.parse(json, Pipeline.reviver);
-        } else {
-            return Object.assign(Object.create(Pipeline.prototype), json, {
-                widgets: json.widgets.map((value: any) =>
-                    WidgetUtils.fromJSON(value)
-                ),
-            });
-        }
-    }
-
-    static reviver(key: string, value: any): any {
-        return key === "" ? Pipeline.fromJSON(value) : value;
+    static fromJSON(json: PipelineJSON): Pipeline {
+        return Object.assign(Object.create(Pipeline.prototype), json, {
+            widgets: json.widgets.map((value: WidgetJSON) =>
+                WidgetUtils.fromJSON(value)
+            ),
+        });
     }
 }
 

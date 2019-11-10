@@ -1,29 +1,16 @@
-import {StreamData} from "./widgets/StreamData";
-import {SliderData} from "./widgets/SliderData";
-import {DoubleSliderData} from "./widgets/DoubleSliderData";
-import {WidgetData, WidgetType} from "./WidgetData";
+import {Stream} from "./widgets/Stream";
+import {Slider} from "./widgets/Slider";
+import {DoubleSlider} from "./widgets/DoubleSlider";
+import {Widget, WidgetJSON} from "./Widget";
 
 export class WidgetUtils {
-    static fromJSON(json: any | string): WidgetData {
-        if (typeof json === 'string') {
-            return JSON.parse(json, WidgetUtils.reviver);
-        } else {
-            switch (json.type) {
-                case WidgetType.STREAM:
-                    // @ts-ignore
-                    return StreamData.fromJSON(json);
-                case WidgetType.SLIDER:
-                    // @ts-ignore
-                    return SliderData.fromJSON(json);
-                case WidgetType.DOUBLE_SLIDER:
-                    // @ts-ignore
-                    return DoubleSliderData.fromJSON(json);
-            }
-        }
-        throw new Error("Invalid component type!")
-    }
+    private static widgetMap: { [index: string]: typeof Widget } = {
+        "STREAM": Stream,
+        "SLIDER": Slider,
+        "DOUBLE_SLIDER": DoubleSlider,
+    };
 
-    static reviver(key: string, value: any): any {
-        return key === "" ? WidgetUtils.fromJSON(value) : value;
+    static fromJSON(json: WidgetJSON): Widget {
+        return Object.assign(Object.create(this.widgetMap[json.type].prototype), json, {});
     }
 }
