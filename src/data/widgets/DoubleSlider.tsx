@@ -9,16 +9,18 @@ export class DoubleSlider extends Widget {
         return <div key={this.name}>
             <input
                 type="number"
-                value={this.lowerValue}
+                defaultValue={this.lowerValue}
                 onChange={(e) => {
+                    if (e.target.value === '') return;
                     this.lowerValue = Number(e.target.value);
                     handleChange();
                 }}
             />
             <input
                 type="number"
-                value={this.upperValue}
+                defaultValue={this.upperValue}
                 onChange={(e) => {
+                    if (e.target.value === '') return;
                     this.upperValue = Number(e.target.value);
                     handleChange();
                 }}

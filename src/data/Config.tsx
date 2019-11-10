@@ -1,12 +1,13 @@
-import {Pipeline} from "./Pipeline";
+import {Group} from "./widgets/Group";
+import {WidgetUtils} from "./WidgetUtils";
 
 export class Config {
-    public pipelines: Array<Pipeline>;
+    public pipelines: Array<Group>;
     public selectedPipelineIndex: number;
 
     static fromJSON(json: CvConfigJSON): Config {
         return Object.assign(Object.create(Config.prototype), json, {
-            pipelines: json.pipelines.map((value: any) => Pipeline.fromJSON(value)),
+            pipelines: json.pipelines.map((value: any) => WidgetUtils.fromJSON(value)),
         });
     }
 }

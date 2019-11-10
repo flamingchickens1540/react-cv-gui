@@ -10,10 +10,13 @@ export class WidgetUtils {
         "SLIDER": Slider,
         "DOUBLE_SLIDER": DoubleSlider,
         "GROUP": Group,
+        undefined: Group,
     };
 
     static fromJSON(json: WidgetJSON): Widget {
-        let targetWidget = Object.create(this.widgetMap[json.type].prototype) as Widget;
+        let widgetMapElement = this.widgetMap[json.type];
+        if (widgetMapElement === undefined) throw new Error("Unknown Widget Type!!");
+        let targetWidget = Object.create(widgetMapElement.prototype) as Widget;
         return Object.assign(targetWidget, json, targetWidget.getJSONRules(json));
     }
 }

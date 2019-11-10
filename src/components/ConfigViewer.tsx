@@ -1,8 +1,7 @@
 import * as React from "react";
 // @ts-ignore
 import {Config} from "../data/Config";
-import {PipelineViewer} from "./PipelineViewer";
-import {Pipeline} from "../data/Pipeline";
+import {Group} from "../data/widgets/Group";
 
 export interface ConfigViewerProps {
 }
@@ -102,8 +101,8 @@ export class ConfigViewer extends React.Component<ConfigViewerProps, ConfigViewe
     private updateState = () => this.setState({config: this.state.config});
 
     render() {
-        let pipelineToOption = (pipeline: Pipeline, index: number) => <option value={index}
-                                                                              key={pipeline.name}>{pipeline.name}</option>;
+        let pipelineToOption = (pipeline: Group, index: number) => <option value={index}
+                                                                           key={pipeline.name}>{pipeline.name}</option>;
         let currentPipeline = this.state.config.pipelines[this.state.config.selectedPipelineIndex];
 
         return <div>
@@ -112,7 +111,7 @@ export class ConfigViewer extends React.Component<ConfigViewerProps, ConfigViewe
                     onChange={this.handlePipelineIndexChange}>
                 {this.state.config.pipelines.map(pipelineToOption)}
             </select>
-            <PipelineViewer pipeline={currentPipeline} onChange={this.updateState}/>
+            {currentPipeline.renderComponent(this.updateState)}
         </div>;
     }
 }

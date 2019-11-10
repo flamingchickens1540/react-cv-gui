@@ -8,8 +8,9 @@ export class Slider extends Widget {
         return <div key={this.name}>
             <input
                 type="number"
-                value={this.value}
+                defaultValue={this.value}
                 onChange={(e) => {
+                    if (e.target.value === '') return;
                     this.value = Number(e.target.value);
                     handleChange();
                 }}
