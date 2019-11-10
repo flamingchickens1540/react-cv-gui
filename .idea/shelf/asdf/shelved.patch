@@ -1,0 +1,300 @@
+Index: src/data/cv-components/CvDoubleSlider.ts
+===================================================================
+--- src/data/cv-components/CvDoubleSlider.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
++++ src/data/cv-components/CvDoubleSlider.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
+@@ -1,24 +0,0 @@
+-import {CvComponent, CvComponentJSON} from "../CvComponent";
+-
+-export class CvDoubleSlider extends CvComponent {
+-    lowerValue: number;
+-    upperValue: number;
+-
+-    static fromJSON(json: CvDoubleSliderJSON | string): CvDoubleSlider {
+-        if (typeof json === 'string') {
+-            return JSON.parse(json, CvDoubleSlider.reviver);
+-        } else {
+-            let user = Object.create(CvDoubleSlider.prototype);
+-            return Object.assign(user, json, {});
+-        }
+-    }
+-
+-    static reviver(key: string, value: any): any {
+-        return key === "" ? CvDoubleSlider.fromJSON(value) : value;
+-    }
+-}
+-
+-class CvDoubleSliderJSON extends CvComponentJSON {
+-    lowerValue: number;
+-    upperValue: number;
+-}
+Index: src/data/cv-components/CvSlider.ts
+===================================================================
+--- src/data/cv-components/CvSlider.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
++++ src/data/cv-components/CvSlider.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
+@@ -1,23 +0,0 @@
+-import {CvComponent, CvComponentJSON} from "../CvComponent";
+-
+-export class CvSlider extends CvComponent {
+-    value: number;
+-
+-    static fromJSON(json: CvComponentJSON | string): CvSlider {
+-        if (typeof json === 'string') {
+-            return JSON.parse(json, CvSlider.reviver);
+-        } else {
+-            let user = Object.create(CvSlider.prototype);
+-            return Object.assign(user, json, {});
+-        }
+-    }
+-
+-    static reviver(key: string, value: any): any {
+-        return key === "" ? CvSlider.fromJSON(value) : value;
+-    }
+-}
+-
+-
+-class CvSliderJSON {
+-    value: number;
+-}
+Index: src/data/cv-components/CvStream.ts
+===================================================================
+--- src/data/cv-components/CvStream.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
++++ src/data/cv-components/CvStream.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
+@@ -1,22 +0,0 @@
+-import {CvComponent} from "../CvComponent";
+-
+-export class CvStream extends CvComponent {
+-    url: string;
+-
+-    static fromJSON(json: CvStreamJSON | string): CvStream {
+-        if (typeof json === 'string') {
+-            return JSON.parse(json, CvStream.reviver);
+-        } else {
+-            let user = Object.create(CvStream.prototype);
+-            return Object.assign(user, json, {});
+-        }
+-    }
+-
+-    static reviver(key: string, value: any): any {
+-        return key === "" ? CvStream.fromJSON(value) : value;
+-    }
+-}
+-
+-class CvStreamJSON {
+-    url: string;
+-}
+Index: src/data/CvComponent.ts
+===================================================================
+--- src/data/CvComponent.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
++++ src/data/CvComponent.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
+@@ -1,42 +0,0 @@
+-import {CvStream} from "./cv-components/CvStream";
+-import {CvSlider} from "./cv-components/CvSlider";
+-import {CvDoubleSlider} from "./cv-components/CvDoubleSlider";
+-
+-export enum ComponentTypes {
+-    STREAM = "STREAM",
+-    SLIDER = "SLIDER",
+-    DOUBLE_SLIDER = "DOUBLE_SLIDER"
+-}
+-
+-export abstract class CvComponent {
+-    type: ComponentTypes;
+-    key: string;
+-
+-    static fromJSON(json: any | string): CvComponent {
+-        if (typeof json === 'string') {
+-            return JSON.parse(json, CvComponent.reviver);
+-        } else {
+-            switch (json.type) {
+-                case ComponentTypes.STREAM:
+-                    // @ts-ignore
+-                    return CvStream.fromJSON(json);
+-                case ComponentTypes.SLIDER:
+-                    // @ts-ignore
+-                    return CvSlider.fromJSON(json);
+-                case ComponentTypes.DOUBLE_SLIDER:
+-                    // @ts-ignore
+-                    return CvDoubleSlider.fromJSON(json);
+-            }
+-        }
+-        throw new Error("Invalid component type!")
+-    }
+-
+-    static reviver(key: string, value: any): any {
+-        return key === "" ? CvComponent.fromJSON(value) : value;
+-    }
+-}
+-
+-export class CvComponentJSON {
+-    type: string;
+-    key: string;
+-}
+Index: src/data/CvConfig.ts
+===================================================================
+--- src/data/CvConfig.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
++++ src/data/CvConfig.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
+@@ -1,27 +0,0 @@
+-import {CvPipeline} from "./CvPipeline";
+-
+-export class CvConfig {
+-
+-    public pipelines: Array<CvPipeline>;
+-
+-    static fromJSON(json: CvConfigJSON | string): CvConfig {
+-        if (typeof json === 'string') {
+-            return JSON.parse(json, CvConfig.reviver);
+-        } else {
+-            let user = Object.create(CvConfig.prototype);
+-            return Object.assign(user, json, {
+-                pipelines: json.pipelines.map((value: any) => {
+-                    CvPipeline.fromJSON(value)
+-                }),
+-            });
+-        }
+-    }
+-
+-    static reviver(key: string, value: any): any {
+-        return key === "" ? CvConfig.fromJSON(value) : value;
+-    }
+-}
+-
+-class CvConfigJSON {
+-    pipelines: any;
+-}
+Index: src/data/CvPipeline.ts
+===================================================================
+--- src/data/CvPipeline.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
++++ src/data/CvPipeline.ts	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
+@@ -1,28 +0,0 @@
+-import {CvComponent} from "./CvComponent";
+-
+-export class CvPipeline {
+-    name: string;
+-    components: Array<CvComponent>;
+-
+-    static fromJSON(json: PipelineJSON | string): CvPipeline {
+-        if (typeof json === 'string') {
+-            return JSON.parse(json, CvPipeline.reviver);
+-        } else {
+-            let user = Object.create(CvPipeline.prototype);
+-            return Object.assign(user, json, {
+-                pipelines: json.components.map((value: any) => {
+-                    CvComponent.fromJSON(value)
+-                }),
+-            });
+-        }
+-    }
+-
+-    static reviver(key: string, value: any): any {
+-        return key === "" ? CvPipeline.fromJSON(value) : value;
+-    }
+-}
+-
+-class PipelineJSON {
+-    name: string;
+-    components: Array<CvComponent>;
+-}
+Index: src/data/Data.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/data/Data.ts	(date 1573346308885)
++++ src/data/Data.ts	(date 1573346308885)
+@@ -0,0 +1,8 @@
++class Pipeline {
++    name: string;
++    com
++}
++
++export class CvConfig {
++    pipelines: Pipeline[];
++}
+\ No newline at end of file
+Index: src/index.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import * as React from \"react\";\r\nimport * as ReactDOM from \"react-dom\";\r\nimport './global.scss'\r\n\r\nimport {PipelineRenderer} from \"./components/PipelineRenderer\";\r\n\r\nReactDOM.render(\r\n    <PipelineRenderer pipelineJSON={`\r\n    {\r\n    \"woaaaaw\":3,\r\n    \"woaaaw\":3,\r\n    \"woaaw\":3,\r\n    \"woaw\":3,\r\n    \"wow\":3\r\n    }\r\n    `}/>,\r\n    document.getElementById(\"example\")\r\n);\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/index.tsx	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
++++ src/index.tsx	(date 1573345943476)
+@@ -2,10 +2,10 @@
+ import * as ReactDOM from "react-dom";
+ import './global.scss'
+ 
+-import {PipelineRenderer} from "./components/PipelineRenderer";
++import {PipelineViewer} from "./components/PipelineViewer";
+ 
+ ReactDOM.render(
+-    <PipelineRenderer pipelineJSON={`
++    <PipelineViewer pipeline={`
+     {
+     "woaaaaw":3,
+     "woaaaw":3,
+Index: src/components/PipelineRenderer.tsx
+===================================================================
+--- src/components/PipelineRenderer.tsx	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
++++ src/components/PipelineViewer.tsx	(date 1573345943478)
+@@ -1,22 +1,13 @@
+ import * as React from "react";
+-import {CvPipeline} from "../data/CvPipeline";
+-import {ComponentTypes, CvComponent} from "../data/CvComponent";
+ 
+ export interface PipelineRendererProps {
+-    pipeline: CvPipeline
++    pipeline: any;
+ }
+ 
+-export class PipelineRenderer extends React.Component<PipelineRendererProps, {}> {
++export class PipelineViewer extends React.Component<PipelineRendererProps, {}> {
+     render() {
+         return <div>
+             {this.props.pipeline.components.forEach(this.generateComponent)}
+         </div>;
+     }
+-
+-    private generateComponent(component: CvComponent) {
+-        switch (component.type) {
+-            case ComponentTypes.STREAM:
+-                return <
+-        }
+-            }
+-            }
++}
+Index: src/components/CvViewController.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import * as React from \"react\";\r\n// @ts-ignore\r\nimport Websocket from 'react-websocket';\r\nimport {CvConfig} from \"../data/CvConfig\";\r\nimport {PipelineRenderer} from \"./PipelineRenderer\";\r\n\r\nexport interface CvViewControllerProps {\r\n}\r\n\r\nexport interface CvViewControllerState {\r\n    config: CvConfig;\r\n    selectedPipelineIndex: number\r\n}\r\n\r\nexport class CvViewController extends React.Component<CvViewControllerProps, CvViewControllerState> {\r\n\r\n    handleCvConfigUpdates(jsonString: string) {\r\n        this.setState({config: JSON.parse(jsonString, CvConfig.reviver)});\r\n    }\r\n\r\n    render() {\r\n\r\n        return <div>\r\n            <Websocket url={'ws://' + location.hostname + ':8888/websocket'} onMessage={this.handleCvConfigUpdates}/>\r\n            <select value={this.state.selectedPipelineIndex}>\r\n                {this.state.config.pipelines.map((pipeline, index) => <option value={index}>{pipeline.name}</option>)}\r\n            </select>\r\n            <PipelineRenderer pipeline={this.state.config.pipelines[this.state.selectedPipelineIndex]}/>\r\n        </div>;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/components/CvViewController.tsx	(revision 8b756374a20ed4d5b2728dfd02b0fc5126d0bdd8)
++++ src/components/CvViewController.tsx	(date 1573346308883)
+@@ -1,8 +1,8 @@
+ import * as React from "react";
+ // @ts-ignore
+ import Websocket from 'react-websocket';
+-import {CvConfig} from "../data/CvConfig";
+-import {PipelineRenderer} from "./PipelineRenderer";
++import {CvConfig} from "../data/Data";
++import {PipelineViewer} from "./PipelineViewer";
+ 
+ export interface CvViewControllerProps {
+ }
+@@ -19,13 +19,12 @@
+     }
+ 
+     render() {
+-
+         return <div>
+             <Websocket url={'ws://' + location.hostname + ':8888/websocket'} onMessage={this.handleCvConfigUpdates}/>
+             <select value={this.state.selectedPipelineIndex}>
+                 {this.state.config.pipelines.map((pipeline, index) => <option value={index}>{pipeline.name}</option>)}
+             </select>
+-            <PipelineRenderer pipeline={this.state.config.pipelines[this.state.selectedPipelineIndex]}/>
++            <PipelineViewer pipeline={this.state.config.pipelines[this.state.selectedPipelineIndex]}/>
+         </div>;
+     }
+ }
