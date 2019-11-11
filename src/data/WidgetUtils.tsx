@@ -1,14 +1,14 @@
 import {Stream} from "./widgets/Stream";
-import {Slider} from "./widgets/Slider";
-import {DoubleSlider} from "./widgets/DoubleSlider";
+import {CvSlider} from "./widgets/CvSlider";
+import {CvDoubleSlider} from "./widgets/CvDoubleSlider";
 import {Widget, WidgetJSON} from "./Widget";
 import {Group} from "./widgets/Group";
 
 export class WidgetUtils {
     private static widgetMap: { [index: string]: typeof Widget } = {
         "STREAM": Stream,
-        "SLIDER": Slider,
-        "DOUBLE_SLIDER": DoubleSlider,
+        "SLIDER": CvSlider,
+        "DOUBLE_SLIDER": CvDoubleSlider,
         "GROUP": Group,
         undefined: Group, // pipeline TODO: Remove
     };

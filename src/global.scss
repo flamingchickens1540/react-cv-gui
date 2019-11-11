@@ -1,3 +1,19 @@
 body {
-  background-color: lightgray;
+  background-color: white;
+}
+
+.slider-container {
+  display: flex;
+
+  & > * {
+    padding: 5px 1%;
+  }
+}
+
+.input.first, .input.last {
+  width: 15%;
+}
+
+.slider {
+  width: 70%;
 }

@@ -16,7 +16,9 @@
         {
           "type": "SLIDER",
           "name": "myFirstStream",
-          "value": 2
+          "value": 2,
+          "min": 0,
+          "max": 100
         },
         {
           "type": "SLIDER",
@@ -69,5 +71,5 @@
       ]
     }
   ],
-  "selectedPipelineIndex": 2
+  "selectedPipelineIndex": 1
 }

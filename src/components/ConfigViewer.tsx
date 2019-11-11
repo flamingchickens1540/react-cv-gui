@@ -2,6 +2,7 @@ import * as React from "react";
 import {Config} from "../data/Config";
 import {Group} from "../data/widgets/Group";
 import * as sampleConfig from "../sample-config.json"
+import {MenuItem, Select} from "@material-ui/core";
 
 export interface ConfigViewerProps {
 }
@@ -24,23 +25,23 @@ export class ConfigViewer extends React.Component<ConfigViewerProps, ConfigViewe
         this.setState({config: Config.fromJSON(JSON.parse(jsonString))});
     }
 
-    private handlePipelineIndexChange = (e: { target: { selectedIndex: number; }; }) => {
-        this.state.config.selectedPipelineIndex = e.target.selectedIndex;
+    private handlePipelineIndexChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+        this.state.config.selectedPipelineIndex = e.target.value as number;
         this.updateState();
     };
 
     private updateState = () => this.setState({config: this.state.config});
 
     render() {
-        let pipelineToOption = (pipeline: Group, index: number) => <option value={index} key={pipeline.name}>{pipeline.name}</option>;
+        let pipelineToOption = (pipeline: Group, index: number) => <MenuItem value={index} key={pipeline.name}>{pipeline.name}</MenuItem>;
         let currentPipeline = this.state.config.pipelines[this.state.config.selectedPipelineIndex];
 
         return <div>
             {/*<Websocket url={'ws://' + location.hostname + ':8888/websocket'} onMessage={this.handleCvConfigUpdates}/>*/}
-            <select value={this.state.config.selectedPipelineIndex}
+            <Select value={this.state.config.selectedPipelineIndex}
                     onChange={this.handlePipelineIndexChange}>
                 {this.state.config.pipelines.map(pipelineToOption)}
-            </select>
+            </Select>
             {currentPipeline.renderComponent(this.updateState)}
         </div>;
     }

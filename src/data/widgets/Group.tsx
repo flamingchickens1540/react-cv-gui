@@ -14,7 +14,7 @@ export class Group extends Widget {
     widgets: Array<Widget>;
 
     public renderComponent(handleChange: () => void) {
-        return <div key={this.name} style={{background: randomColor()}}>
+        return <div key={this.name} style={{outline: "1px solid"}}>
             {this.widgets.map(component => component.renderComponent(handleChange))}
         </div>;
     }
